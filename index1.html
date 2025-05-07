@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>মেসার্স শামীম মটরস - লগইন</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #1c1c44;
+      font-family: 'Siyam Rupali', sans-serif;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-box {
+      background: #292963;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+      width: 100%;
+      max-width: 400px;
+    }
+    .db-title {
+      background-color: darkgreen;
+      color: gold;
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    .btn-custom {
+      background-color: white;
+      color: green;
+      font-weight: bold;
+      border-radius: 8px;
+      width: 48%;
+    }
+    .btn-custom:hover {
+      background-color: #cceccc;
+    }
+    label {
+      margin-top: 10px;
+      color: gold;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-box text-center">
+  <h2>মেসার্স শামীম মটরস</h2>
+  <div class="db-title">ডেটাবেস ফর্ম</div>
+
+  <form onsubmit="login(event)">
+    <div class="mb-3 text-start">
+      <label for="username" class="form-label">ইউজারনেম</label>
+      <input type="text" class="form-control" id="username" required>
+    </div>
+
+    <div class="mb-3 text-start">
+      <label for="password" class="form-label">পাসওয়ার্ড</label>
+      <input type="password" class="form-control" id="password" required>
+    </div>
+
+    <div class="d-flex justify-content-between mt-4">
+      <button type="submit" class="btn btn-custom">লগইন</button>
+      <button type="button" class="btn btn-custom" onclick="signup()">সাইন আপ</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  function login(event) {
+    event.preventDefault();
+    const user = document.getElementById('username').value;
+    const pass = document.getElementById('password').value;
+    if (user === "admin" && pass === "1234") {
+      window.location.href = "Dashboard.html";
+    } else {
+      alert("ভুল ইউজারনেম অথবা পাসওয়ার্ড!");
+    }
+  }
+
+  function signup() {
+    alert('সাইন আপ ফিচার আসছে শীঘ্রই!');
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
