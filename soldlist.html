@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sold List</title>
+  <style>
+    body { background-color: #1c1c44; font-family: 'Siyam Rupali', sans-serif; color: white; margin: 0; padding: 20px; }
+    .container { max-width: 1200px; margin: auto; background-color: #29295c; padding: 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+    h2 { text-align: center; color: gold; margin-bottom: 20px; }
+    .buttons { text-align: right; margin-bottom: 10px; }
+    .buttons button { background-color: #22225c; color: gold; font-weight: bold; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; margin-left: 8px; }
+    .buttons button:hover { background-color: #444575; }
+    #fileInput { display: none; }
+    .table-responsive { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 1200px; }
+    th, td { padding: 8px; border: 1px solid #444; text-align: left; font-size: 14px; }
+    th { background-color: #22225c; color: gold; }
+    tr:nth-child(even) { background-color: #1f1f3f; }
+    .nowrap { white-space: nowrap; }
+    @media (max-width:600px) {
+      table, th, td { font-size: 12px; }
+      th, td { padding: 5px; }
+    }
+  </style>
+</head>
+<body>
+  <div style="text-align: right; margin: 10px;">
+  <button 
+    type="button" 
+    onclick="window.location.href='Dashboard.html';"
+    style="
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      font-size: 14px;
+      border-radius: 4px;
+      cursor: pointer;
+    ">
+    Home
+  </button>
+</div>
+  <div class="container">
+    <h2>Sold List</n2>
+    <div class="buttons">
+      <button id="downloadData">তথ্য ডাউনলোড</button>
+      <button id="uploadData">তথ্য আপলোড</button>
+      <input type="file" id="fileInput" accept=".csv" />
+    </div>
+    <div class="table-responsive">
+      <table id="soldTable">
+        <thead>
+          <tr>
+            <th class="nowrap">ক্রমিক নং</th>
+            <th class="nowrap">তারিখ</th>
+            <th>নাম</th>
+            <th>পিতার নাম</th>
+            <th class="nowrap">NID</th>
+            <th class="nowrap">জন্মতারিখ</th>
+            <th>মোবাইল</th>
+            <th>ঠিকানা</th>
+            <th>গাড়ির ধরন</th>
+            <th class="nowrap">নম্বর প্লেট</th>
+            <th class="nowrap">ইঞ্জিন নং</th>
+            <th class="nowrap">চ্যাসিস নং</th>
+            <th>মডেল</th>
+            <th class="nowrap">CC</th>
+            <th>রং</th>
+            <th class="nowrap">ক্রয় মূল্য</th>
+            <th>খাত 01</th><th class="nowrap">টাকা 01</th>
+            <th>খাত 02</th><th class="nowrap">টাকা 02</th>
+            <th>খাত 03</th><th class="nowrap">টাকা 03</th>
+            <th>খাত 04</th><th class="nowrap">টাকা 04</th>
+            <th>খাত 05</th><th class="nowrap">টাকা 05</th>
+            <th>খাত 06</th><th class="nowrap">টাকা 06</th>
+            <th>খাত 07</th><th class="nowrap">টাকা 07</th>
+            <th>খাত 08</th><th class="nowrap">টাকা 08</th>
+            <th>খাত 09</th><th class="nowrap">টাকা 09</th>
+            <th>খাত 10</th><th class="nowrap">টাকা 10</th>
+            <th>খাত 11</th><th class="nowrap">টাকা 11</th>
+            <th>খাত 12</th><th class="nowrap">টাকা 12</th>
+            <th>খাত 13</th><th class="nowrap">টাকা 13</th>
+            <th>খাত 14</th><th class="nowrap">টাকা 14</th>
+            <th>খাত 15</th><th class="nowrap">টাকা 15</th>
+            <th>খাত 16</th><th class="nowrap">টাকা 16</th>
+            <th>খাত 17</th><th class="nowrap">টাকা 17</th>
+            <th>খাত 18</th><th class="nowrap">টাকা 18</th>
+            <th>খাত 19</th><th class="nowrap">টাকা 19</th>
+            <th>খাত 20</th><th class="nowrap">টাকা 20</th>
+            <th class="nowrap">আনুষাঙ্গিক মোট</th>
+            <th class="nowrap">মোট মূল্য</th>
+            <th class="nowrap">অপসারণ</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const fields = [
+      'serial','date','name','father','nid','dob','mobile','address',
+      'vehicle_type','number_plate','engine','chassis','model','cc','color','total'
+    ];
+    for (let i = 1; i <= 20; i++) {
+      fields.push('item'+i);
+      fields.push('amount'+i);
+    }
+    fields.push('accessories','due');
+
+    function renderTable() {
+      const soldEntries = JSON.parse(localStorage.getItem('soldEntries') || '[]');
+      const tbody = document.querySelector('#soldTable tbody');
+      tbody.innerHTML = '';
+      soldEntries.forEach((entry, index) => {
+        const tr = document.createElement('tr');
+        fields.forEach(f => {
+          const td = document.createElement('td');
+          td.textContent = entry[f] || '';
+          tr.appendChild(td);
+        });
+        // delete button cell
+        const tdDel = document.createElement('td');
+        const btn = document.createElement('button');
+        btn.innerHTML = '🗑️';
+        btn.className = 'delete-btn';
+        btn.title = 'মুছে ফেলুন';
+        btn.addEventListener('click', () => deleteEntry(index));
+        tdDel.appendChild(btn);
+        tr.appendChild(tdDel);
+        tbody.appendChild(tr);
+      });
+    }
+
+    function deleteEntry(idx) {
+      let soldEntries = JSON.parse(localStorage.getItem('soldEntries') || '[]');
+      soldEntries.splice(idx, 1);
+      localStorage.setItem('soldEntries', JSON.stringify(soldEntries));
+      renderTable();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderTable();
+
+      document.getElementById('downloadData').addEventListener('click', () => {
+        const rows = document.querySelectorAll('#soldTable tr');
+        let csv = [];
+        rows.forEach(row => {
+          const cols = row.querySelectorAll('th, td');
+          let rowData = [];
+          cols.forEach(col => {
+            rowData.push('"' + col.textContent.replace(/"/g, '""') + '"');
+          });
+          csv.push(rowData.join(','));
+        });
+        const bom = '\uFEFF';
+        const csvContent = bom + csv.join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'sold_list.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      document.getElementById('uploadData').addEventListener('click', () => {
+        document.getElementById('fileInput').click();
+      });
+
+      document.getElementById('fileInput').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = () => {
+          const text = reader.result.replace(/^\uFEFF/, '');
+          const lines = text.split('\n');
+          const newEntries = [];
+          for (let i = 1; i < lines.length; i++) {
+            if (!lines[i].trim()) continue;
+            const values = lines[i].split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').replace(/""/g, '"'));
+            const entry = {};
+            fields.forEach((f, idx) => entry[f] = values[idx] || '');
+            newEntries.push(entry);
+          }
+          localStorage.setItem('soldEntries', JSON.stringify(newEntries));
+          renderTable();
+        };
+        reader.readAsText(file, 'UTF-8');
+      });
+    });
+  </script>
+</body>
+</html>

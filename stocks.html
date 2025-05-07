@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bike Stocks List</title>
+  <style>
+    body { background-color: #1c1c44; font-family: 'Siyam Rupali', sans-serif; color: white; margin: 0; padding: 20px; }
+    .container { max-width: 1200px; margin: auto; background-color: #29295c; padding: 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+    h2 { text-align: center; color: gold; margin-bottom: 20px; }
+    .table-responsive { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 800px; }
+    th, td { padding: 8px; border: 1px solid #444; text-align: left; font-size: 14px; }
+    th { background-color: #22225c; color: gold; }
+    tr:nth-child(even) { background-color: #1f1f3f; }
+    .nowrap { white-space: nowrap; }
+    .delete-btn { background: transparent; border: none; cursor: pointer; color: #ff4d4d; font-size: 16px; }
+    .delete-btn:hover { color: #ff1a1a; }
+    @media (max-width: 600px) {
+      table, th, td { font-size: 12px; padding: 5px; }
+      /* allow horizontal scroll instead of block layout */
+      .table-responsive { overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div style="text-align: right; margin: 10px;">
+  <button 
+    type="button" 
+    onclick="window.location.href='Dashboard.html';"
+    style="
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      font-size: 14px;
+      border-radius: 4px;
+      cursor: pointer;
+    ">
+    Home
+  </button>
+</div>
+  <div class="container">
+    <h2>Bike Stocks List</h2>
+    <div class="table-responsive">
+      <table id="stocksTable">
+        <thead>
+          <tr>
+            <th>গাড়ির ধরন</th>
+            <th>নাম্বার প্লেট</th>
+            <th>ইঞ্জিন নং</th>
+            <th>চ্যাসিস নং</th>
+            <th>মডেল</th>
+            <th class="nowrap">CC</th>
+            <th>রং</th>
+            <th class="nowrap">ক্রয় মূল্য</th>
+            <th class="nowrap">আনুষাঙ্গিক মোট</th>
+            <th class="nowrap">মোট মূল্য</th>
+            <th>মুছুন</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    let entries = JSON.parse(localStorage.getItem('entries') || '[]');
+    const fields = ['vehicle_type','number_plate','engine','chassis','model','cc','color','total','accessories','due'];
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const tbody = document.querySelector('#stocksTable tbody');
+      entries.forEach((entry, idx) => {
+        const tr = document.createElement('tr');
+        fields.forEach(f => {
+          const td = document.createElement('td');
+          td.textContent = entry[f] || '';
+          tr.appendChild(td);
+        });
+        const delTd = document.createElement('td');
+        const btn = document.createElement('button');
+        btn.className = 'delete-btn';
+        btn.innerHTML = '🗑️';
+        btn.title = 'মুছুন';
+        btn.addEventListener('click', () => {
+          entries.splice(idx, 1);
+          localStorage.setItem('entries', JSON.stringify(entries));
+          tr.remove();
+        });
+        delTd.appendChild(btn);
+        tr.appendChild(delTd);
+        tbody.appendChild(tr);
+      });
+    });
+  </script>
+</body>
+</html>
